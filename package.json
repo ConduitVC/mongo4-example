@@ -1,0 +1,12 @@
+{
+  "name": "@conduitvc/mongo4",
+  "version": "1.0.0",
+  "description": "example of mongo4 usage with docker-compose",
+  "main": "index.js",
+  "author": "cvci <james@conduit.vc>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "mongodb": "^3.1.6"
+  }
+}
