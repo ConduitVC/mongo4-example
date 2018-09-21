@@ -1,7 +1,7 @@
-async function main() {
-  const MongoClient = require("mongodb").MongoClient;
-  const assert = require("assert");
+const MongoClient = require("mongodb").MongoClient;
+const assert = require("assert");
 
+async function main() {
   // Connection URL
   const url = "mongodb://localhost:27017";
 
@@ -24,12 +24,17 @@ async function main() {
 
   const testObjOne = { foo: 1 };
   const testObjTwo = { foobar: 1 };
-  await Promise.all([
+  const [{ insertedId: oneID }, { insertedId: twoID }] = await Promise.all([
     collection.insertOne(testObjOne, { session }),
     collection.insertOne(testObjTwo, { session })
   ]);
 
+  const read = await collection.findOne({ _id: oneID });
+  assert(read == null, "should not be able to find object until commit");
+
   const out = await session.commitTransaction();
+  const readAfterCommit = await collection.findOne({ _id: oneID });
+  assert(readAfterCommit, "can find object after commit");
 
   client.close();
 }
